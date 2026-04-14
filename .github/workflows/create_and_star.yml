@@ -1,8 +1,8 @@
-name: Create and Star Repositories
+name: Create and Star 30 Repositories
 
 on:
   schedule:
-    - cron: "0 */4 * * *"   # Runs every 4 hours
+    - cron: "0 */4 * * *"   # every 4 hours
   workflow_dispatch:
 
 jobs:
@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
       - name: Install GitHub CLI
         run: |
           sudo apt update
@@ -22,7 +19,7 @@ jobs:
         run: |
           echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
 
-      - name: Create and Star 30 Repos
+      - name: Create and Star Repositories
         run: |
           USER=$(gh api user --jq .login)
 
@@ -30,9 +27,9 @@ jobs:
           do
             REPO="auto-repo-$RANDOM-$i"
 
-            echo "Creating $REPO"
-            gh repo create "$USER/$REPO" --public --confirm
+            echo "Creating repository $REPO"
+            gh repo create "$USER/$REPO" --public -y
 
-            echo "Starring $REPO"
-            gh repo star "$USER/$REPO"
+            echo "Starring repository $REPO"
+            gh api -X PUT user/starred/$USER/$REPO
           done
