@@ -30,25 +30,26 @@ jobs:
            gh repo clone "$USER/$REPO"
            cd "$REPO"
 
-           BRANCH="auto-update-$(date +%s)"
-           git checkout -b "$BRANCH"
+            BRANCH="auto-update-$(date +%s)"
+            git checkout -b "$BRANCH"
 
-  # Always create real change
-  echo "Update: $(date)" >> activity.log
-  echo "Random: $RANDOM" >> activity.log
+            # Always create real change
+            echo "Update: $(date)" >> activity.log
+            echo "Random: $RANDOM" >> activity.log
 
-   git add activity.log
-   git commit -m "Automated update"
-   git push origin "$BRANCH"
+           git add activity.log
+           git commit -m "Automated update"
+           git push origin "$BRANCH"
 
-   PR_URL=$(gh pr create \
-    --title "Automated update" \
-    --body "Routine update")
+           PR_URL=$(gh pr create \
+          --title "Automated update" \
+          --body "Routine update")
 
-   PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
 
-   gh pr merge "$PR_NUM" --squash --auto
+          gh pr merge "$PR_NUM" --squash --auto
 
-   cd ..
-   rm -rf "$REPO"
-done
+          cd ..
+          rm -rf "$REPO"
+  done
+    
