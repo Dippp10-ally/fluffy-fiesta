@@ -25,31 +25,11 @@ jobs:
 
           for i in {1..30}
           do
-          REPO="repo-$i"
+            REPO="auto-repo-$RANDOM-$i"
 
-           gh repo clone "$USER/$REPO"
-           cd "$REPO"
+            echo "Creating repository $REPO"
+            gh repo create "$USER/$REPO" --public -y
 
-            BRANCH="auto-update-$(date +%s)"
-            git checkout -b "$BRANCH"
-
-            # Always create real change
-            echo "Update: $(date)" >> activity.log
-            echo "Random: $RANDOM" >> activity.log
-
-           git add activity.log
-           git commit -m "Automated update"
-           git push origin "$BRANCH"
-
-           PR_URL=$(gh pr create \
-          --title "Automated update" \
-          --body "Routine update")
-
-          PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
-
-          gh pr merge "$PR_NUM" --squash --auto
-
-          cd ..
-          rm -rf "$REPO"
-  done
-    
+            echo "Starring repository $REPO"
+            gh api -X PUT user/starred/$USER/$REPO
+          done
