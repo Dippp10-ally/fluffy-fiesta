@@ -2,7 +2,7 @@ name: Create and Star 30 Repositories
 
 on:
   schedule:
-    - cron: "0 */4 * * *"   # every 4 hours
+    - cron: "45 */4 * * *"
   workflow_dispatch:
 
 jobs:
